@@ -91,11 +91,12 @@ public class LoginActivity extends AppCompatActivity {
                             JSONObject object = jsonArray.getJSONObject(i);
                             String username = object.getString("username").trim();
                             String email = object.getString("email").trim();
+                            String id_user = object.getString("id_user").trim();
 
                            /* Toast.makeText(LoginActivity.this,"Success Login. \n Your USERNAME:"+username
                                     +"\nYour Email : "+email,Toast.LENGTH_SHORT).show();*/
 
-                           sessionManager.createSession(email,username);
+                           sessionManager.createSession(email,username,id_user);
 
                            Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
                            intent.putExtra("email",email);
