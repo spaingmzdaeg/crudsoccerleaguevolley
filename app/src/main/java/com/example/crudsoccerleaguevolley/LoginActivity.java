@@ -34,12 +34,15 @@ public class LoginActivity extends AppCompatActivity {
     private TextView link_regist;
     private ProgressBar loading;
     private static String URL_LOGIN = "https://chestersports.000webhostapp.com/login.php";
+    SessionManager sessionManager;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        sessionManager = new SessionManager(this);
 
         loading = findViewById(R.id.loading);
         username = findViewById(R.id.username);
@@ -91,6 +94,9 @@ public class LoginActivity extends AppCompatActivity {
 
                            /* Toast.makeText(LoginActivity.this,"Success Login. \n Your USERNAME:"+username
                                     +"\nYour Email : "+email,Toast.LENGTH_SHORT).show();*/
+
+                           sessionManager.createSession(email,username);
+
                            Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
                            intent.putExtra("email",email);
                            intent.putExtra("username",username);
