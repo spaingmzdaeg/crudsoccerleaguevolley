@@ -89,8 +89,12 @@ public class LoginActivity extends AppCompatActivity {
                             String username = object.getString("username").trim();
                             String email = object.getString("email").trim();
 
-                            Toast.makeText(LoginActivity.this,"Success Login. \n Your USERNAME:"+username
-                                    +"\nYour Email : "+email,Toast.LENGTH_SHORT).show();
+                           /* Toast.makeText(LoginActivity.this,"Success Login. \n Your USERNAME:"+username
+                                    +"\nYour Email : "+email,Toast.LENGTH_SHORT).show();*/
+                           Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
+                           intent.putExtra("email",email);
+                           intent.putExtra("username",username);
+                           startActivity(intent);
 
                             loading.setVisibility(View.GONE);
 
