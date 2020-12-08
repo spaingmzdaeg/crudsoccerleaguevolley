@@ -72,6 +72,8 @@ public class LoginActivity extends AppCompatActivity {
      });
     }
 
+
+
     private void Login(String username,String password){
         loading.setVisibility(View.VISIBLE);
         btn_login.setVisibility(View.GONE);
