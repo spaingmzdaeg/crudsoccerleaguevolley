@@ -19,7 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,10 +41,11 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class HomeActivity extends AppCompatActivity {
+public class PlayersActivity extends AppCompatActivity {
+
     private static final String TAG = HomeActivity.class.getSimpleName();
     private TextView email,username;
-    private Button btn_logout,btn_photo_upload,btn_players;
+    private Button btn_photo_upload,btn_add_player;
     SessionManager sessionManager;
     String getId_User;
     private static String URL_READ =  "https://chestersports.000webhostapp.com/read_detail.php";
@@ -59,24 +59,25 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_players);
 
         sessionManager = new SessionManager(this);
         sessionManager.checkLogin();
 
         email = findViewById(R.id.email);
         username = findViewById(R.id.username);
-        btn_logout = findViewById(R.id.btn_logout);
+
         btn_photo_upload = findViewById(R.id.btn_photo);
+        btn_add_player = findViewById(R.id.btn_add_users);
         profile_image = findViewById(R.id.profile_image);
-        btn_players = findViewById(R.id.btn_players);
+
 
         HashMap<String,String> user = sessionManager.getUserDetail();
         getId_User = user.get(sessionManager.ID_USER);
-       // String mEmail = user.get(sessionManager.EMAIL);
+        // String mEmail = user.get(sessionManager.EMAIL);
         //String mUsername = user.get(sessionManager.USERNAME);
 
-       // email.setText(mEmail);
+        // email.setText(mEmail);
         //username.setText(mUsername);
 
        /* Intent intent = getIntent();
@@ -86,12 +87,7 @@ public class HomeActivity extends AppCompatActivity {
         //email.setText(extraEmail);
         //username.setText(extraUsername);
 
-        btn_logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sessionManager.logout();
-            }
-        });
+
 
         btn_photo_upload.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,14 +97,15 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        btn_players.setOnClickListener(new View.OnClickListener() {
+        btn_add_player.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent1 = new Intent(HomeActivity.this, PlayersActivity.class);
+                Intent intent1 = new Intent(PlayersActivity.this, AddPlayersActivity.class);
                 startActivity(intent1);
                 finish();
             }
         });
+
     }
 
     public void getUserDetail(){
@@ -143,7 +140,7 @@ public class HomeActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                     progressDialog.dismiss();
-                    Toast.makeText(HomeActivity.this,"Error Reading Detail "+e.toString(),Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PlayersActivity.this,"Error Reading Detail "+e.toString(),Toast.LENGTH_SHORT).show();
                 }
             }
         }, new Response.ErrorListener() {
@@ -152,7 +149,7 @@ public class HomeActivity extends AppCompatActivity {
 
                 error.printStackTrace();
                 progressDialog.dismiss();
-                Toast.makeText(HomeActivity.this,"Error Reading Detail "+error.toString(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(PlayersActivity.this,"Error Reading Detail "+error.toString(),Toast.LENGTH_SHORT).show();
 
             }
         })
@@ -246,13 +243,13 @@ public class HomeActivity extends AppCompatActivity {
                     String success = jsonObject.getString("success");
 
                     if(success.equals("1")){
-                        Toast.makeText(HomeActivity.this,"Success!",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PlayersActivity.this,"Success!",Toast.LENGTH_SHORT).show();
                         sessionManager.createSession(email,username,id_user);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                     progressDialog.dismiss();
-                    Toast.makeText(HomeActivity.this,"ERROR!"+e.toString(),Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PlayersActivity.this,"ERROR!"+e.toString(),Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -260,7 +257,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 progressDialog.dismiss();
-                Toast.makeText(HomeActivity.this,"ERROR!"+error.toString(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(PlayersActivity.this,"ERROR!"+error.toString(),Toast.LENGTH_SHORT).show();
 
             }
         })
@@ -320,12 +317,12 @@ public class HomeActivity extends AppCompatActivity {
                     JSONObject jsonObject = new JSONObject(response.substring(response.indexOf("{"),response.lastIndexOf("}")+1));
                     String success = jsonObject.getString("success");
                     if(success.equals("1")){
-                        Toast.makeText(HomeActivity.this,"success",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PlayersActivity.this,"success",Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                     progressDialog.dismiss();
-                    Toast.makeText(HomeActivity.this,"TRY AGAIN!"+e.toString(),Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PlayersActivity.this,"TRY AGAIN!"+e.toString(),Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -333,7 +330,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 progressDialog.dismiss();
-                Toast.makeText(HomeActivity.this,"ERROR"+error.toString(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(PlayersActivity.this,"ERROR"+error.toString(),Toast.LENGTH_SHORT).show();
             }
         })
 
@@ -358,7 +355,5 @@ public class HomeActivity extends AppCompatActivity {
         String encodedImage = Base64.encodeToString(imageByteArray,Base64.DEFAULT);
         return encodedImage;
     }
-
-
 
 }
