@@ -106,6 +106,9 @@ public class LoginActivity extends AppCompatActivity {
                             loading.setVisibility(View.GONE);
 
                         }
+                    }else if(success.equals("0")){
+                        btn_login.setVisibility(View.VISIBLE);
+                        Toast.makeText(LoginActivity.this,"Credentials Incorrect !",Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

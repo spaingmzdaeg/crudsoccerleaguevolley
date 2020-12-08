@@ -2,7 +2,11 @@ package com.example.crudsoccerleaguevolley;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -46,12 +50,56 @@ public class RegisterActivity extends AppCompatActivity {
         confpassword = findViewById(R.id.confpassword);
         btn_signup = findViewById(R.id.btn_signup);
 
+
         btn_signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Signup();
+                if(validator()){
+                    Signup();
+                }
+
+
             }
         });
+    }
+
+    private boolean validator(){
+        final String username = this.username.getText().toString().trim();
+        final String email = this.email.getText().toString().trim();
+        final String password = this.password.getText().toString().trim();
+        final String confpassword = this.confpassword.getText().toString().trim();
+
+        if(username.length() < 5){
+            Toast.makeText(RegisterActivity.this,"USERNAME MIN 5 chararcters !",Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(username.length() > 20){
+            Toast.makeText(RegisterActivity.this,"USERNAME MAX 20 chararcters !",Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(!isValidEmail(email)){
+            Toast.makeText(RegisterActivity.this,"Email Invalited !",Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(password.length() < 8){
+            Toast.makeText(RegisterActivity.this,"Password Min 8 characters !",Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(password.length() > 20){
+            Toast.makeText(RegisterActivity.this,"Password Max 20 characters !",Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(!password.equals(confpassword)){
+            Toast.makeText(RegisterActivity.this,"Passwords must be the same !",Toast.LENGTH_SHORT).show();
+            return false;
+        }else {
+            return true;
+        }
+
+    }
+
+    private boolean isValidEmail(String target) {
+        return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
+    }
+
+
+    public static void showToast(Context mContext, String message){
+        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
     }
 
 
@@ -71,12 +119,17 @@ public class RegisterActivity extends AppCompatActivity {
 
                 try {
                     //JSONObject jsonObject = new JSONObject(response.substring(response.indexOf("{"),response.lastIndexOf("}")+1));
+
                     JSONObject jsonObject = new JSONObject(response.substring(response.indexOf("{"),response.lastIndexOf("}")+1));
                     String success = jsonObject.getString("success");
 
 
                     if (success.equals("1")){
                         Toast.makeText(RegisterActivity.this,"SIGNUP SUCCESS!",Toast.LENGTH_SHORT).show();
+
+                        Intent intent1 = new Intent(RegisterActivity.this, HomeActivity.class);
+                        startActivity(intent1);
+                        finish();
                         //System.out.println("deberia funcionar");
                     }
 
