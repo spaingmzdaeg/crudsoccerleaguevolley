@@ -120,7 +120,7 @@ public class PlayersActivity extends AppCompatActivity {
                 progressDialog.dismiss();
                 Log.i(TAG,response.toString());
                 try {
-                    JSONObject jsonObject = new JSONObject(response.substring(response.indexOf("{"),response.lastIndexOf("}")+1));
+                    JSONObject jsonObject = new JSONObject(response);
                     String success = jsonObject.getString("success");
                     JSONArray jsonArray = jsonObject.getJSONArray("read");
 
@@ -239,7 +239,7 @@ public class PlayersActivity extends AppCompatActivity {
                 progressDialog.dismiss();
 
                 try {
-                    JSONObject jsonObject = new JSONObject(response.substring(response.indexOf("{"),response.lastIndexOf("}")+1));
+                    JSONObject jsonObject = new JSONObject(response);
                     String success = jsonObject.getString("success");
 
                     if(success.equals("1")){
@@ -314,7 +314,7 @@ public class PlayersActivity extends AppCompatActivity {
                 progressDialog.dismiss();
                 Log.i(TAG,response.toString());
                 try {
-                    JSONObject jsonObject = new JSONObject(response.substring(response.indexOf("{"),response.lastIndexOf("}")+1));
+                    JSONObject jsonObject = new JSONObject(response);
                     String success = jsonObject.getString("success");
                     if(success.equals("1")){
                         Toast.makeText(PlayersActivity.this,"success",Toast.LENGTH_SHORT).show();

@@ -120,7 +120,7 @@ public class RegisterActivity extends AppCompatActivity {
                 try {
                     //JSONObject jsonObject = new JSONObject(response.substring(response.indexOf("{"),response.lastIndexOf("}")+1));
 
-                    JSONObject jsonObject = new JSONObject(response.substring(response.indexOf("{"),response.lastIndexOf("}")+1));
+                    JSONObject jsonObject = new JSONObject(response);
                     String success = jsonObject.getString("success");
 
 
