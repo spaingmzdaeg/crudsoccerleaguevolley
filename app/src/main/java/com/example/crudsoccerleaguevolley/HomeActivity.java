@@ -61,6 +61,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+
         sessionManager = new SessionManager(this);
         sessionManager.checkLogin();
 
@@ -106,7 +107,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent1 = new Intent(HomeActivity.this, PlayersActivity.class);
                 startActivity(intent1);
-                finish();
+               // finish();
             }
         });
     }

@@ -60,6 +60,7 @@ public class PlayersActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_players);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         sessionManager = new SessionManager(this);
         sessionManager.checkLogin();
@@ -102,7 +103,7 @@ public class PlayersActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent1 = new Intent(PlayersActivity.this, AddPlayersActivity.class);
                 startActivity(intent1);
-                finish();
+                //finish();
             }
         });
 

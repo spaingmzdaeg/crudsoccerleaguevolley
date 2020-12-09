@@ -2,9 +2,16 @@ package com.example.crudsoccerleaguevolley;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -25,17 +32,25 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class AddPlayersActivity extends AppCompatActivity {
-    Spinner team, position, country;
+    Spinner id_team, position, country;
+    String id_team_aux;
+    EditText first_name,last_name,kit;
     ArrayList<String> teamList = new ArrayList<>();
     ArrayAdapter<String> teamAdapter;
     RequestQueue requestQueueTeams;
-    private static String URL_TEAMS = "https://chestersports.000webhostapp.com/teams.php";
+    private static String URL_PLAYERS = "https://chestersports.000webhostapp.com/register_player.php";
+    private Bitmap bitmap;
+    ImageView player_image;
+    Button btn_photo,btn_add_player;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_players);
+       // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         String[] arrayCountries = new String[]{"Afghanistan", "Albania", "Algeria", "American Samoa", "Andorra", "Angola", "Anguilla",
 
@@ -122,8 +137,14 @@ public class AddPlayersActivity extends AppCompatActivity {
         adapterCountry.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         country.setAdapter(adapterCountry);
 
+        first_name = findViewById(R.id.first_name);
+        last_name = findViewById(R.id.last_name);
+        kit = findViewById(R.id.kit);
+        btn_add_player = findViewById(R.id.btn_add_players);
+        btn_photo = findViewById(R.id.btn_photo);
+
         requestQueueTeams = Volley.newRequestQueue(this);
-        team = (Spinner) findViewById(R.id.team);
+        id_team = (Spinner) findViewById(R.id.id_team);
         String url = "https://chestersports.000webhostapp.com/teams.php";
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
@@ -133,11 +154,11 @@ public class AddPlayersActivity extends AppCompatActivity {
                     JSONArray jsonArray = response.getJSONArray("teams");
                     for(int i=0; i<jsonArray.length(); i++){
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        String teamClub = jsonObject.optString("club");
+                        String teamClub = jsonObject.optString("id_team");//aqui es club para que muestre nombre
                         teamList.add(teamClub);
                         teamAdapter = new ArrayAdapter<>(AddPlayersActivity.this,android.R.layout.simple_spinner_item,teamList);
                         teamAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        team.setAdapter(teamAdapter);}
+                        id_team.setAdapter(teamAdapter);}
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Toast.makeText(AddPlayersActivity.this,"Error Reading Detail "+e.toString(),Toast.LENGTH_SHORT).show();
@@ -152,7 +173,92 @@ public class AddPlayersActivity extends AppCompatActivity {
             }
         });
         requestQueueTeams.add(jsonObjectRequest);
+        
+        btn_add_player.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                register();
+            }
+        });
 
     }
+
+    private void register(){
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Saving...");
+        progressDialog.show();
+
+
+        final String id_team = this.id_team.getSelectedItem().toString();
+        final String first_name = this.first_name.getText().toString().trim();
+        final String last_name = this.last_name.getText().toString().trim();
+        final String kit = this.kit.getText().toString().trim();
+        final String position = this.position.getSelectedItem().toString();
+        final String country = this.country.getSelectedItem().toString();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_PLAYERS, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                progressDialog.dismiss();
+
+                try {
+                    //JSONObject jsonObject = new JSONObject(response.substring(response.indexOf("{"),response.lastIndexOf("}")+1));
+
+                    JSONObject jsonObject = new JSONObject(response);
+                    String success = jsonObject.getString("success");
+
+
+                    if (success.equals("1")){
+                        Toast.makeText(AddPlayersActivity.this,"Player Register SUCCESS!",Toast.LENGTH_SHORT).show();
+                    }if (success.equals("0")){
+                        Toast.makeText(AddPlayersActivity.this,"PHP FAIL!",Toast.LENGTH_SHORT).show();
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    progressDialog.dismiss();
+                    Toast.makeText(AddPlayersActivity.this,"Player Register Exception!" + e.toString(),Toast.LENGTH_SHORT).show();
+
+                    btn_add_player.setVisibility(View.VISIBLE);
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                Toast.makeText(AddPlayersActivity.this,"player register ERROR!" + error.toString(),Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+
+                btn_add_player.setVisibility(View.VISIBLE);
+            }
+        })
+        {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> params = new HashMap<>();
+                params.put("id_team",id_team);
+                params.put("first_name",first_name);
+                params.put("last_name",last_name);
+                params.put("kit",kit);
+                params.put("position",position);
+                params.put("country",country);
+               // params.put("photo",photo);
+
+
+                return params;
+            }
+        };
+
+
+        //HttpsTrustManager.allowAllSSL();
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+
+
+
+    }
+
+
 
 }
