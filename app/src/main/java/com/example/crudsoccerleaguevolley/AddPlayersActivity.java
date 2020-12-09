@@ -155,7 +155,8 @@ public class AddPlayersActivity extends AppCompatActivity {
                     for(int i=0; i<jsonArray.length(); i++){
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                         String teamClub = jsonObject.optString("id_team");//aqui es club para que muestre nombre
-                        teamList.add(teamClub);
+                        String teamClubName = jsonObject.optString("club");
+                        teamList.add(teamClub+"-"+teamClubName);
                         teamAdapter = new ArrayAdapter<>(AddPlayersActivity.this,android.R.layout.simple_spinner_item,teamList);
                         teamAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         id_team.setAdapter(teamAdapter);}
@@ -173,7 +174,9 @@ public class AddPlayersActivity extends AppCompatActivity {
             }
         });
         requestQueueTeams.add(jsonObjectRequest);
-        
+
+
+
         btn_add_player.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -189,12 +192,13 @@ public class AddPlayersActivity extends AppCompatActivity {
         progressDialog.show();
 
 
-        final String id_team = this.id_team.getSelectedItem().toString();
+        final String id_team = this.id_team.getSelectedItem().toString().substring(0,this.id_team.getSelectedItem().toString().indexOf("-"));
         final String first_name = this.first_name.getText().toString().trim();
         final String last_name = this.last_name.getText().toString().trim();
         final String kit = this.kit.getText().toString().trim();
         final String position = this.position.getSelectedItem().toString();
         final String country = this.country.getSelectedItem().toString();
+
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_PLAYERS, new Response.Listener<String>() {
             @Override
