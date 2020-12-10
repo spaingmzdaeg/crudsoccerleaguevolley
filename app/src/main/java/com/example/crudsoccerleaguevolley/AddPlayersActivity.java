@@ -50,8 +50,8 @@ public class AddPlayersActivity extends AppCompatActivity {
     private Bitmap bitmap;
     ImageView player_image;
     Button btn_photo,btn_add_player;
-    String filepath;
-    int imageCount;
+    int count_images;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -200,10 +200,12 @@ public class AddPlayersActivity extends AppCompatActivity {
     }
 
     private void register(){
+        int numero = (int)(Math.random()*100000+1);;
+
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Saving...");
         progressDialog.show();
-        imageCount++;
+
 
 
         final String id_team = this.id_team.getSelectedItem().toString().substring(0,this.id_team.getSelectedItem().toString().indexOf("-"));
@@ -212,8 +214,7 @@ public class AddPlayersActivity extends AppCompatActivity {
         final String kit = this.kit.getText().toString().trim();
         final String position = this.position.getSelectedItem().toString();
         final String country = this.country.getSelectedItem().toString();
-        final String namePhoto = String.valueOf(imageCount);
-
+        final String namePhoto = String.valueOf(numero);
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_PLAYERS, new Response.Listener<String>() {
             @Override
@@ -305,7 +306,7 @@ public class AddPlayersActivity extends AppCompatActivity {
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),filePath);
                 player_image.setImageBitmap(bitmap);
                 Toast.makeText(AddPlayersActivity.this,filePath.toString(),Toast.LENGTH_LONG).show();
-                filepath = filePath.toString();
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
