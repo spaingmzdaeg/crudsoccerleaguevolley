@@ -1,11 +1,15 @@
 package com.example.crudsoccerleaguevolley;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -28,6 +32,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +42,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AddPlayersActivity extends AppCompatActivity {
     Spinner id_team, position, country;
-    String id_team_aux;
     EditText first_name,last_name,kit;
     ArrayList<String> teamList = new ArrayList<>();
     ArrayAdapter<String> teamAdapter;
@@ -45,12 +50,14 @@ public class AddPlayersActivity extends AppCompatActivity {
     private Bitmap bitmap;
     ImageView player_image;
     Button btn_photo,btn_add_player;
+    String filepath;
+    int imageCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_players);
-       // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+       getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         String[] arrayCountries = new String[]{"Afghanistan", "Albania", "Algeria", "American Samoa", "Andorra", "Angola", "Anguilla",
 
@@ -142,6 +149,7 @@ public class AddPlayersActivity extends AppCompatActivity {
         kit = findViewById(R.id.kit);
         btn_add_player = findViewById(R.id.btn_add_players);
         btn_photo = findViewById(R.id.btn_photo);
+        player_image = findViewById(R.id.imgPhoto);
 
         requestQueueTeams = Volley.newRequestQueue(this);
         id_team = (Spinner) findViewById(R.id.id_team);
@@ -175,7 +183,12 @@ public class AddPlayersActivity extends AppCompatActivity {
         });
         requestQueueTeams.add(jsonObjectRequest);
 
-
+        btn_photo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chooseFile();
+            }
+        });
 
         btn_add_player.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -190,6 +203,7 @@ public class AddPlayersActivity extends AppCompatActivity {
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Saving...");
         progressDialog.show();
+        imageCount++;
 
 
         final String id_team = this.id_team.getSelectedItem().toString().substring(0,this.id_team.getSelectedItem().toString().indexOf("-"));
@@ -198,6 +212,7 @@ public class AddPlayersActivity extends AppCompatActivity {
         final String kit = this.kit.getText().toString().trim();
         final String position = this.position.getSelectedItem().toString();
         final String country = this.country.getSelectedItem().toString();
+        final String namePhoto = String.valueOf(imageCount);
 
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_PLAYERS, new Response.Listener<String>() {
@@ -247,7 +262,8 @@ public class AddPlayersActivity extends AppCompatActivity {
                 params.put("kit",kit);
                 params.put("position",position);
                 params.put("country",country);
-               // params.put("photo",photo);
+               params.put("photo",getStringImage(bitmap));
+                params.put("namePhoto",namePhoto);
 
 
                 return params;
@@ -263,6 +279,40 @@ public class AddPlayersActivity extends AppCompatActivity {
 
     }
 
+    private void chooseFile(){
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent,"Select Picture"),1);
 
+    }
+
+    public String getStringImage(Bitmap bitmap){
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
+
+        byte[] imageByteArray = byteArrayOutputStream.toByteArray();
+        String encodedImage = Base64.encodeToString(imageByteArray,Base64.DEFAULT);
+        return encodedImage;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null){
+            Uri filePath = data.getData();
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),filePath);
+                player_image.setImageBitmap(bitmap);
+                Toast.makeText(AddPlayersActivity.this,filePath.toString(),Toast.LENGTH_LONG).show();
+                filepath = filePath.toString();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+
+        }
+    }
 
 }
