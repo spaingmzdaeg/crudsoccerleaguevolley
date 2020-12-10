@@ -45,7 +45,7 @@ public class PlayersActivity extends AppCompatActivity {
 
     private static final String TAG = HomeActivity.class.getSimpleName();
     private TextView email,username;
-    private Button btn_photo_upload,btn_add_player;
+    private Button btn_photo_upload,btn_add_player,btn_search_player_list;
     SessionManager sessionManager;
     String getId_User;
     private static String URL_READ =  "https://chestersports.000webhostapp.com/read_detail.php";
@@ -70,6 +70,7 @@ public class PlayersActivity extends AppCompatActivity {
 
         btn_photo_upload = findViewById(R.id.btn_photo);
         btn_add_player = findViewById(R.id.btn_add_users);
+        btn_search_player_list = findViewById(R.id.btn_search_player_list);
         profile_image = findViewById(R.id.profile_image);
 
 
@@ -106,6 +107,17 @@ public class PlayersActivity extends AppCompatActivity {
                 //finish();
             }
         });
+
+        btn_search_player_list.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(PlayersActivity.this, RecyclerViewPlayers.class);
+                startActivity(intent1);
+                //finish();
+            }
+        });
+
+
 
     }
 
