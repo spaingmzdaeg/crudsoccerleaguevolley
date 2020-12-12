@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,6 +17,16 @@ import java.util.ArrayList;
 public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerViewHolder> {
     private Context mContext;
     private ArrayList<PlayersItem> mPlayersList;
+    private OnItemClickListener mListener;
+
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        mListener = listener;
+    }
+
 
     public PlayerAdapter(Context context, ArrayList<PlayersItem> exampleList) {
         mContext = context;
@@ -39,12 +50,12 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerView
         String positionplayer = currentItem.getmPosition();
         String country = currentItem.getmCountry();
 
-        holder.mTextViewIdTeam.setText(id_team);
-        holder.mTextViewFirstName.setText(first_name);
-        holder.mTextViewLastName.setText(last_name);
-        holder.mTextViewKit.setText(kit);
-        holder.mTextViewPosition.setText(positionplayer);
-        holder.mTextViewCountry.setText(country);
+        holder.mTextViewIdTeam.setText("Id_Team:"+id_team);
+        holder.mTextViewFirstName.setText("first_name:"+first_name);
+        holder.mTextViewLastName.setText("last_name:"+last_name);
+        holder.mTextViewKit.setText("KIT:"+kit);
+        holder.mTextViewPosition.setText("Position:"+positionplayer);
+        holder.mTextViewCountry.setText("Country:"+country);
 
         Picasso.with(mContext).load(imageUrl).fit().centerInside().into(holder.mImageView);
     }
@@ -72,6 +83,19 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerView
             mTextViewKit = itemView.findViewById(R.id.text_view_kit);
             mTextViewPosition = itemView.findViewById(R.id.text_view_position);
             mTextViewCountry = itemView.findViewById(R.id.text_view_country);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mListener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            mListener.onItemClick(position);
+                        }
+                    }
+                }
+            });
+
         }
     }
 

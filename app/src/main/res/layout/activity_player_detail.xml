@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".PlayerDetail">
+
+    <ImageView
+        android:id="@+id/image_view_detail"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:src="@mipmap/ic_launcher" />
+
+    <Button
+        android:id="@+id/btn_update_players"
+        android:textColor="@android:color/white"
+        android:backgroundTint="@color/colorPrimary"
+        android:text="Update Player"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/btn_delete_players"
+        android:textColor="@android:color/white"
+        android:backgroundTint="@color/colorPrimary"
+        android:text="Delete Players"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <TextView
+        android:id="@+id/text_view_first_name_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:textColor="@android:color/black"
+        android:text="Likes: "
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/text_view_last_name_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:textColor="@android:color/black"
+        android:text="Likes: "
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/text_view_kit_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:textColor="@android:color/black"
+        android:text="Likes: "
+        android:textSize="30sp" />
+
+
+    <TextView
+        android:id="@+id/text_view_id_team_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:text="Creator Name"
+        android:textColor="@android:color/black"
+        android:textSize="40sp" />
+
+
+
+    <TextView
+        android:id="@+id/text_view_position_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:text="Likes: "
+        android:textSize="40sp" />
+    <TextView
+        android:id="@+id/text_view_country_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:text="Likes: "
+        android:textSize="40sp" />
+
+</LinearLayout>

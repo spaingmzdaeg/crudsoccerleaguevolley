@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -20,7 +21,16 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class RecyclerViewPlayers extends AppCompatActivity {
+public class RecyclerViewPlayers extends AppCompatActivity implements PlayerAdapter.OnItemClickListener {
+
+    public static final String EXTRA_IMAGE = "photo";
+    public static final String EXTRA_ID_TEAM = "id_team";
+    public static final String EXTRA_FIRST_NAME = "first_name";
+    public static final String EXTRA_LAST_NAME = "last_name";
+    public static final String EXTRA_KIT = "kit";
+    public static final String EXTRA_POSITION = "position";
+    public static final String EXTRA_COUNTRY = "country";
+
 
     private RecyclerView mRecyclerView;
     private PlayerAdapter mPlayerAdapter;
@@ -51,7 +61,7 @@ public class RecyclerViewPlayers extends AppCompatActivity {
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject player = jsonArray.getJSONObject(i);
                                 String imageUrl = player.getString("photo");
-                                String id_team = player.getString("id_player");
+                                String id_team = player.getString("id_team");
                                 String first_name = player.getString("first_name");
                                 String last_name = player.getString("last_name");
                                 String kit = player.getString("kit");
@@ -61,6 +71,7 @@ public class RecyclerViewPlayers extends AppCompatActivity {
                             }
                             mPlayerAdapter = new PlayerAdapter(RecyclerViewPlayers.this, mPlayersList);
                             mRecyclerView.setAdapter(mPlayerAdapter);
+                            mPlayerAdapter.setOnItemClickListener(RecyclerViewPlayers.this);
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Toast.makeText(RecyclerViewPlayers.this,"ERROR!"+e.toString(),Toast.LENGTH_SHORT).show();
@@ -74,5 +85,19 @@ public class RecyclerViewPlayers extends AppCompatActivity {
             }
         });
         mRequestQueue.add(request);
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        Intent detailIntent = new Intent(this, PlayerDetail.class);
+        PlayersItem clickedItem = mPlayersList.get(position);
+        detailIntent.putExtra(EXTRA_IMAGE, clickedItem.getmImageUrl());
+        detailIntent.putExtra(EXTRA_ID_TEAM, clickedItem.getmIdTeam());
+        detailIntent.putExtra(EXTRA_FIRST_NAME, clickedItem.getmFirstName());
+        detailIntent.putExtra(EXTRA_LAST_NAME, clickedItem.getmLastName());
+        detailIntent.putExtra(EXTRA_KIT, clickedItem.getmKit());
+        detailIntent.putExtra(EXTRA_POSITION, clickedItem.getmPosition());
+        detailIntent.putExtra(EXTRA_COUNTRY, clickedItem.getmCountry());
+        startActivity(detailIntent);
     }
 }
