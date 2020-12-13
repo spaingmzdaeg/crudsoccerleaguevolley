@@ -11,9 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppThemeRegist">
-
+        <activity android:name=".EditPlayersActivity"></activity>
         <activity android:name=".RecyclerViewPlayers" />
-        <activity android:name=".PlayerDetail"></activity>
+        <activity android:name=".PlayerDetail" />
         <activity
             android:name=".AddPlayersActivity"
             android:parentActivityName=".PlayersActivity" />

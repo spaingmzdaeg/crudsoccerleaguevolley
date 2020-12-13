@@ -9,6 +9,7 @@ public class PlayersItem {
     private String mKit;
     private String mPosition;
     private String mCountry;
+    private String mIdPlayer;
 
     public PlayersItem(String mImageUrl, String mIdTeam, String mFirstName, String mLastName, String mKit, String mPosition, String mCountry) {
         this.mImageUrl = mImageUrl;
@@ -18,6 +19,25 @@ public class PlayersItem {
         this.mKit = mKit;
         this.mPosition = mPosition;
         this.mCountry = mCountry;
+    }
+
+    public PlayersItem(String mImageUrl, String mIdTeam, String mFirstName, String mLastName, String mKit, String mPosition, String mCountry, String mIdPlayer) {
+        this.mImageUrl = mImageUrl;
+        this.mIdTeam = mIdTeam;
+        this.mFirstName = mFirstName;
+        this.mLastName = mLastName;
+        this.mKit = mKit;
+        this.mPosition = mPosition;
+        this.mCountry = mCountry;
+        this.mIdPlayer = mIdPlayer;
+    }
+
+    public String getmIdPlayer() {
+        return mIdPlayer;
+    }
+
+    public void setmIdPlayer(String mIdPlayer) {
+        this.mIdPlayer = mIdPlayer;
     }
 
     public String getmImageUrl() {

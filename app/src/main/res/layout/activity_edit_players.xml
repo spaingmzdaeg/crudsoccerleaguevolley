@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/idLayoutAddPlayers"
-    tools:context=".AddPlayersActivity">
+    tools:context=".EditPlayersActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="ADD PLAYERS"
+            android:text="UPDATE PLAYERS"
             android:gravity="center"
             android:textSize="20sp"
             android:layout_marginBottom="20dp"
@@ -92,10 +92,10 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/btn_add_players"
+        android:id="@+id/btn_update"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="ADD"
+        android:text="UPDATE"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"

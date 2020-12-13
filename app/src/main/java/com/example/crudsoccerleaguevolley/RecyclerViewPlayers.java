@@ -30,6 +30,7 @@ public class RecyclerViewPlayers extends AppCompatActivity implements PlayerAdap
     public static final String EXTRA_KIT = "kit";
     public static final String EXTRA_POSITION = "position";
     public static final String EXTRA_COUNTRY = "country";
+    public static final String EXTRA_ID_PLAYER = "id_player";
 
 
     private RecyclerView mRecyclerView;
@@ -61,13 +62,14 @@ public class RecyclerViewPlayers extends AppCompatActivity implements PlayerAdap
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject player = jsonArray.getJSONObject(i);
                                 String imageUrl = player.getString("photo");
+                                String id_player = player.getString("id_player");
                                 String id_team = player.getString("id_team");
                                 String first_name = player.getString("first_name");
                                 String last_name = player.getString("last_name");
                                 String kit = player.getString("kit");
                                 String position = player.getString("position");
                                 String country = player.getString("country");
-                                mPlayersList.add(new PlayersItem(imageUrl, id_team, first_name,last_name,kit,position,country));
+                                mPlayersList.add(new PlayersItem(imageUrl, id_team, first_name,last_name,kit,position,country,id_player));
                             }
                             mPlayerAdapter = new PlayerAdapter(RecyclerViewPlayers.this, mPlayersList);
                             mRecyclerView.setAdapter(mPlayerAdapter);
@@ -98,6 +100,7 @@ public class RecyclerViewPlayers extends AppCompatActivity implements PlayerAdap
         detailIntent.putExtra(EXTRA_KIT, clickedItem.getmKit());
         detailIntent.putExtra(EXTRA_POSITION, clickedItem.getmPosition());
         detailIntent.putExtra(EXTRA_COUNTRY, clickedItem.getmCountry());
+        detailIntent.putExtra(EXTRA_ID_PLAYER, clickedItem.getmIdPlayer());
         startActivity(detailIntent);
     }
 }

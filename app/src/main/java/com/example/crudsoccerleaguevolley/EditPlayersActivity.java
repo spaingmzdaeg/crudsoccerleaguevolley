@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -15,7 +17,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -27,6 +28,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,26 +40,54 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.hdodenhof.circleimageview.CircleImageView;
+import static com.example.crudsoccerleaguevolley.PlayerDetail.EXTRA_COUNTRY;
+import static com.example.crudsoccerleaguevolley.PlayerDetail.EXTRA_FIRST_NAME;
+import static com.example.crudsoccerleaguevolley.PlayerDetail.EXTRA_ID_PLAYER;
+import static com.example.crudsoccerleaguevolley.PlayerDetail.EXTRA_KIT;
+import static com.example.crudsoccerleaguevolley.PlayerDetail.EXTRA_LAST_NAME;
+import static com.example.crudsoccerleaguevolley.PlayerDetail.EXTRA_POSITION;
+import static com.example.crudsoccerleaguevolley.RecyclerViewPlayers.EXTRA_ID_TEAM;
+import static com.example.crudsoccerleaguevolley.RecyclerViewPlayers.EXTRA_IMAGE;
 
-public class AddPlayersActivity extends AppCompatActivity {
+public class EditPlayersActivity extends AppCompatActivity {
+
     Spinner id_team, position, country;
     EditText first_name,last_name,kit;
     ArrayList<String> teamList = new ArrayList<>();
     ArrayAdapter<String> teamAdapter;
     RequestQueue requestQueueTeams;
-    private static String URL_PLAYERS = "https://chestersports.000webhostapp.com/register_player.php";
+    private static String URL_EDIT =  "https://chestersports.000webhostapp.com/edit_players.php";
     private Bitmap bitmap;
     ImageView player_image;
-    Button btn_photo,btn_add_player;
+    Button btn_photo,btn_update;
     int count_images;
-
+    String getId_Player;
+    String getId_Team;
+    String getFirst_Name;
+    String getLast_Name;
+    String getKit;
+    String getPosition;
+    String getCountry;
+    String getImageUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_players);
-       getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setContentView(R.layout.activity_edit_players);
+
+        Intent intent = getIntent();
+         getId_Player = intent.getStringExtra(EXTRA_ID_PLAYER);
+         getId_Team = intent.getStringExtra(EXTRA_ID_TEAM);
+         getFirst_Name = intent.getStringExtra(EXTRA_FIRST_NAME);
+         getLast_Name = intent.getStringExtra(EXTRA_LAST_NAME);
+         getKit = intent.getStringExtra(EXTRA_KIT);
+         getPosition = intent.getStringExtra(EXTRA_POSITION);
+         getCountry = intent.getStringExtra(EXTRA_COUNTRY);
+         getImageUrl = intent.getStringExtra(EXTRA_IMAGE);
+
+        Toast.makeText(EditPlayersActivity.this,"ID_PLAYER:" +getId_Player,Toast.LENGTH_SHORT).show();
+
+
 
         String[] arrayCountries = new String[]{"Afghanistan", "Albania", "Algeria", "American Samoa", "Andorra", "Angola", "Anguilla",
 
@@ -133,10 +163,10 @@ public class AddPlayersActivity extends AppCompatActivity {
                 "Goalkeeper", "Defender", "Midfielder", "Forward"
         };
         position = (Spinner) findViewById(R.id.position);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+        ArrayAdapter<String> adapterPosition = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, arraySpinner);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        position.setAdapter(adapter);
+        adapterPosition.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        position.setAdapter(adapterPosition);
 
         country = findViewById(R.id.country);
         ArrayAdapter<String> adapterCountry = new ArrayAdapter<String>(this,
@@ -147,9 +177,11 @@ public class AddPlayersActivity extends AppCompatActivity {
         first_name = findViewById(R.id.first_name);
         last_name = findViewById(R.id.last_name);
         kit = findViewById(R.id.kit);
-        btn_add_player = findViewById(R.id.btn_add_players);
+        btn_update = findViewById(R.id.btn_update);
         btn_photo = findViewById(R.id.btn_photo);
         player_image = findViewById(R.id.imgPhoto);
+
+
 
         requestQueueTeams = Volley.newRequestQueue(this);
         id_team = (Spinner) findViewById(R.id.id_team);
@@ -165,12 +197,12 @@ public class AddPlayersActivity extends AppCompatActivity {
                         String teamClub = jsonObject.optString("id_team");//aqui es club para que muestre nombre
                         String teamClubName = jsonObject.optString("club");
                         teamList.add(teamClub+"-"+teamClubName);
-                        teamAdapter = new ArrayAdapter<>(AddPlayersActivity.this,android.R.layout.simple_spinner_item,teamList);
+                        teamAdapter = new ArrayAdapter<>(EditPlayersActivity.this,android.R.layout.simple_spinner_item,teamList);
                         teamAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         id_team.setAdapter(teamAdapter);}
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(AddPlayersActivity.this,"Error Reading Detail "+e.toString(),Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditPlayersActivity.this,"Error Reading Detail "+e.toString(),Toast.LENGTH_SHORT).show();
 
                 }
             }
@@ -178,10 +210,22 @@ public class AddPlayersActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                Toast.makeText(AddPlayersActivity.this,"Error Reading Detail "+error.toString(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(EditPlayersActivity.this,"CHANGE PICTURE AGAIN",Toast.LENGTH_SHORT).show();
             }
         });
         requestQueueTeams.add(jsonObjectRequest);
+
+        first_name.setText(getFirst_Name);
+        last_name.setText(getLast_Name);
+        kit.setText(getKit);
+        int spinnerPosition = adapterPosition.getPosition(getPosition);
+        position.setSelection(spinnerPosition);
+        int spinnerCountry = adapterCountry.getPosition(getCountry);
+        country.setSelection(spinnerCountry);
+       // int spinnerTeam = teamAdapter.getPosition(getId_Team);
+       //id_team.setSelection(spinnerTeam);
+
+        Picasso.with(this).load(getImageUrl).fit().centerInside().into(player_image);
 
         btn_photo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -190,16 +234,17 @@ public class AddPlayersActivity extends AppCompatActivity {
             }
         });
 
-        btn_add_player.setOnClickListener(new View.OnClickListener() {
+        btn_update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(validator()) {
-                    register();
-                }
+                if(validator())
+                saveEditPlayer();
             }
         });
 
+
     }
+
 
     private boolean validator(){
         final String first_name = this.first_name.getText().toString().trim();
@@ -208,22 +253,22 @@ public class AddPlayersActivity extends AppCompatActivity {
 
 
         if(first_name.length() < 4){
-            Toast.makeText(AddPlayersActivity.this,"FIRSTNAME MIN 4 chararcters !",Toast.LENGTH_SHORT).show();
+            Toast.makeText(EditPlayersActivity.this,"FIRSTNAME MIN 4 chararcters !",Toast.LENGTH_SHORT).show();
             return false;
         }else if(first_name.length() > 20){
-            Toast.makeText(AddPlayersActivity.this,"FISRTNAME MAX 20 chararcters !",Toast.LENGTH_SHORT).show();
+            Toast.makeText(EditPlayersActivity.this,"FISRTNAME MAX 20 chararcters !",Toast.LENGTH_SHORT).show();
             return false;
         }else if(last_name.length() < 4){
-            Toast.makeText(AddPlayersActivity.this,"LASTNAME MIN 4 chararcters !",Toast.LENGTH_SHORT).show();
+            Toast.makeText(EditPlayersActivity.this,"LASTNAME MIN 4 chararcters !",Toast.LENGTH_SHORT).show();
             return false;
         }else if(last_name.length() > 20){
-            Toast.makeText(AddPlayersActivity.this,"LASTNAME MAX 20 chararcters !",Toast.LENGTH_SHORT).show();
+            Toast.makeText(EditPlayersActivity.this,"LASTNAME MAX 20 chararcters !",Toast.LENGTH_SHORT).show();
             return false;
         }else if(kit.length() > 2){
-            Toast.makeText(AddPlayersActivity.this,"ONLY RANGE 1 TO 100 Permited !",Toast.LENGTH_SHORT).show();
+            Toast.makeText(EditPlayersActivity.this,"ONLY RANGE 1 TO 100 Permited !",Toast.LENGTH_SHORT).show();
             return false;
         }else if(kit.equals("")){
-            Toast.makeText(AddPlayersActivity.this,"kit required !",Toast.LENGTH_SHORT).show();
+            Toast.makeText(EditPlayersActivity.this,"kit required !",Toast.LENGTH_SHORT).show();
             return false;
         }else {
             return true;
@@ -231,14 +276,12 @@ public class AddPlayersActivity extends AppCompatActivity {
 
     }
 
-    private void register(){
+    private void saveEditPlayer(){
         int numero = (int)(Math.random()*100000+1);;
 
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Saving...");
         progressDialog.show();
-
-
 
         final String id_team = this.id_team.getSelectedItem().toString().substring(0,this.id_team.getSelectedItem().toString().indexOf("-"));
         final String first_name = this.first_name.getText().toString().trim();
@@ -248,43 +291,37 @@ public class AddPlayersActivity extends AppCompatActivity {
         final String country = this.country.getSelectedItem().toString();
         final String namePhoto = String.valueOf(numero);
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_PLAYERS, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_EDIT, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 progressDialog.dismiss();
 
                 try {
-                    //JSONObject jsonObject = new JSONObject(response.substring(response.indexOf("{"),response.lastIndexOf("}")+1));
-
                     JSONObject jsonObject = new JSONObject(response);
                     String success = jsonObject.getString("success");
 
+                    if(success.equals("1")){
+                        Toast.makeText(EditPlayersActivity.this,"UPDATE Success!",Toast.LENGTH_SHORT).show();
 
-                    if (success.equals("1")){
-                        Toast.makeText(AddPlayersActivity.this,"Player Register SUCCESS!",Toast.LENGTH_SHORT).show();
-                    }if (success.equals("0")){
-                        Toast.makeText(AddPlayersActivity.this,"PHP FAIL!",Toast.LENGTH_SHORT).show();
+                    }else if(success.equals("0")){
+                        Toast.makeText(EditPlayersActivity.this,"PHP FAIL!",Toast.LENGTH_SHORT).show();
                     }
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                     progressDialog.dismiss();
-                    Toast.makeText(AddPlayersActivity.this,"Player Register Exception!" + e.toString(),Toast.LENGTH_SHORT).show();
-
-                    btn_add_player.setVisibility(View.VISIBLE);
+                    Toast.makeText(EditPlayersActivity.this,"ERROR!"+e.toString(),Toast.LENGTH_SHORT).show();
                 }
 
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
-                Toast.makeText(AddPlayersActivity.this,"ADD PICTURE!",Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
+                Toast.makeText(EditPlayersActivity.this,"ERROR!"+error.toString(),Toast.LENGTH_SHORT).show();
 
-                btn_add_player.setVisibility(View.VISIBLE);
             }
         })
+
         {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
@@ -295,21 +332,15 @@ public class AddPlayersActivity extends AppCompatActivity {
                 params.put("kit",kit);
                 params.put("position",position);
                 params.put("country",country);
-               params.put("photo",getStringImage(bitmap));
+                params.put("photo",getStringImage(bitmap));
                 params.put("namePhoto",namePhoto);
-
-
+                params.put("id_player",getId_Player);
                 return params;
             }
         };
 
-
-        //HttpsTrustManager.allowAllSSL();
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
-
-
-
     }
 
     private void chooseFile(){
@@ -329,24 +360,33 @@ public class AddPlayersActivity extends AppCompatActivity {
         return encodedImage;
     }
 
+    public static boolean hasNullOrEmptyDrawable(ImageView iv)
+    {
+        Drawable drawable = iv.getDrawable();
+        BitmapDrawable bitmapDrawable = drawable instanceof BitmapDrawable ? (BitmapDrawable)drawable : null;
+
+        return bitmapDrawable == null || bitmapDrawable.getBitmap() == null;
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null){
             Uri filePath = data.getData();
             try {
+
+
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),filePath);
                 player_image.setImageBitmap(bitmap);
-                Toast.makeText(AddPlayersActivity.this,filePath.toString(),Toast.LENGTH_LONG).show();
+
+                Toast.makeText(EditPlayersActivity.this,filePath.toString(),Toast.LENGTH_LONG).show();
 
             } catch (IOException e) {
                 e.printStackTrace();
-                Toast.makeText(AddPlayersActivity.this,"EMPTY PICTURE FAIL",Toast.LENGTH_LONG).show();
+                Toast.makeText(EditPlayersActivity.this,"EMPTY PICTURE FAIL",Toast.LENGTH_LONG).show();
             }
-
-
-
         }
     }
+
 
 }
