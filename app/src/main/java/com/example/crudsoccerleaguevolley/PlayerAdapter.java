@@ -65,6 +65,11 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerView
         return mPlayersList.size();
     }
 
+    public void filterList(ArrayList<PlayersItem> filteredList) {
+        mPlayersList = filteredList;
+        notifyDataSetChanged();
+    }
+
     public class PlayerViewHolder extends RecyclerView.ViewHolder {
         public ImageView mImageView;
         public TextView mTextViewIdTeam;
@@ -98,6 +103,8 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerView
 
         }
     }
+
+
 
 
 }
