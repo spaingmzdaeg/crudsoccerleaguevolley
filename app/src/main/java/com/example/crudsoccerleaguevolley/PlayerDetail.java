@@ -110,7 +110,10 @@ public class PlayerDetail extends AppCompatActivity {
         btn_delete_player.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent detailIntent = new Intent(PlayerDetail.this, RecyclerViewPlayers.class);
                 deletePlayer();
+                startActivity(detailIntent);
+
             }
         });
 

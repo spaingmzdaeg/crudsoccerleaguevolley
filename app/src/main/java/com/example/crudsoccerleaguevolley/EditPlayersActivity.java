@@ -237,8 +237,13 @@ public class EditPlayersActivity extends AppCompatActivity {
         btn_update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(validator())
+                if(validator()){
+                    Intent detailIntent = new Intent(EditPlayersActivity.this, RecyclerViewPlayers.class);
                 saveEditPlayer();
+                    startActivity(detailIntent);
+                }
+
+
             }
         });
 
@@ -301,7 +306,7 @@ public class EditPlayersActivity extends AppCompatActivity {
                     String success = jsonObject.getString("success");
 
                     if(success.equals("1")){
-                        Toast.makeText(EditPlayersActivity.this,"UPDATE Success!",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EditPlayersActivity.this,"UPDATE Success!",Toast.LENGTH_LONG).show();
 
                     }else if(success.equals("0")){
                         Toast.makeText(EditPlayersActivity.this,"PHP FAIL!",Toast.LENGTH_SHORT).show();
