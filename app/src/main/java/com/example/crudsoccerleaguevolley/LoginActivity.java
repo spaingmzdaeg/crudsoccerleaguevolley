@@ -33,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button btn_login;
     private TextView link_regist;
     private ProgressBar loading;
-    private static String URL_LOGIN = "https://chestersports.000webhostapp.com/login.php";
+    private static String URL_LOGIN = "https://chestersports.000webhostapp.com/login_android.php";
     SessionManager sessionManager;
 
 

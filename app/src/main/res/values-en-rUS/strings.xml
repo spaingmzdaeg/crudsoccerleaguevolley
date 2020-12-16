@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">crudsoccerleaguevolley</string>
+    <string name="username">username</string>
+    <string name="email">email</string>
+    <string name="Password">Password</string>
+    <string name="Confirm_Password">Confirm Password</string>
+    <string name="Stadiums">Stadiums</string>
+    <string name="Teams">Teams</string>
+    <string name="Players">Players</string>
+    <string name="Jerseys">Jerseys</string>
+    <string name="ADD">Add</string>
+    <string name="Search_Player">Search Player</string>
+    <string name="Search_Player_List">Search Player List</string>
+    <string name="firstname">first name</string>
+    <string name="lastname">last name</string>
+    <string name="kit">kit</string>
+    <string name="updateplayer">update player</string>
+    <string name="deleteplayer">delete player</string>
+</resources>

@@ -1,3 +1,19 @@
 <resources>
     <string name="app_name">crudsoccerleaguevolley</string>
+    <string name="username">nombre de usuario</string>
+    <string name="email">correo</string>
+    <string name="Password">Contrasena</string>
+    <string name="Confirm_Password">Confirmar Contrasena</string>
+    <string name="Stadiums">Estadios</string>
+    <string name="Teams">Equipos</string>
+    <string name="Players">Jugadores</string>
+    <string name="Jerseys">Jerseys</string>
+    <string name="ADD">Agregar</string>
+    <string name="Search_Player">Buscar Jugador</string>
+    <string name="Search_Player_List">Lista de Jugadores</string>
+    <string name="firstname">Nombre</string>
+    <string name="lastname">Apellido</string>
+    <string name="kit">kit</string>
+    <string name="updateplayer">modificar jugador</string>
+    <string name="deleteplayer">eliminar jugador</string>
 </resources>
